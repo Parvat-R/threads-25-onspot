@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 
 # Load MongoDB URI from .env
 load_dotenv()
-# uri = "mongodb+srv://threads25cse:aAlBJxpockulLRWh@threads-1.nlete.mongodb.net/?retryWrites=true&w=majority&appName=threads-1"
-uri = "mongodb://localhost:27017/"
+uri = "mongodb+srv://threads25cse:aAlBJxpockulLRWh@threads-1.nlete.mongodb.net/?retryWrites=true&w=majority&appName=threads-1"
+# uri = "mongodb://localhost:27017/"
 MONGO_URI = os.environ.get("MONGO_URI", uri)
 print(MONGO_URI)
 
@@ -138,14 +138,6 @@ def get_login_otp_status(email: str):
     otp_doc = login_otp_collection.find_one({"email": email})
     return bson_to_json(otp_doc) if otp_doc else None
 
-
-def delete_login_otp(email: str):
-    """Delete login OTP entry"""
-    if login_otp_collection == None:
-        return False
-
-    result = login_otp_collection.delete_one({"email": email})
-    return result.deleted_count > 0
 
 
 def is_otp_valid(email: str):
@@ -316,13 +308,6 @@ def email_is_verified(email: str):
     return otp_doc.get("verified")
 
 
-def delete_payment_entry(email: str):
-    if payment_and_otp_collection == None:
-        return False
-    result = payment_and_otp_collection.delete_one({"email": email})
-    return result.deleted_count > 0
-
-
 def get_all_payments():
     if payment_and_otp_collection == None:
         return []
@@ -364,12 +349,6 @@ def create_admin(username, password):
     inserted_id = admin_collection.insert_one(admin.model_dump()).inserted_id
     return str(inserted_id)
 
-
-def delete_admin(username):
-    if admin_collection == None:
-        return False
-    result = admin_collection.delete_one({"username": username})
-    return result.deleted_count > 0
 
 
 def edit_payment(email: str, payment_data: dict):
