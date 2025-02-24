@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block head %}
+    <style>
+        @font-face {
+            font-family: "Amulya";
+            src: url("/static/fonts/Amulya-Variable.ttf");
+            ;
+        }
+
+        @font-face {
+            font-family: "Amulya Italic";
+            src: url("/static/fonts/Amulya-VariableItalic.ttf");
+            ;
+        }
+
+        @font-face {
+            font-family: "Clash Grotesk";
+            src: url("/static/fonts/ClashGrotesk-Variable.ttf");
+            ;
+        }
+
+        @font-face {
+            font-family: "Satoshi";
+            src: url("/static/fonts/Satoshi-Variable.ttf");
+            ;
+        }
+
+        @font-face {
+            font-family: "Satoshi Italic";
+            src: url("/static/fonts/Satoshi-VariableItalic.ttf");
+            ;
+        }
+        .sona-logo {
+            max-width: 200px;
+        }
+    </style>
+    <link rel="shortcut icon" href="/static/logo t25.png" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='notifications.css') }}" />
+    <title>{% block title %}{% endblock %} | Threads 25 - Sona College Of Technology</title>
+    {% endblock %}
+</head>
+
+<body>
+
+    {% with messages = get_flashed_messages(True) %}
+    {% if messages %}
+    <section id="notifications">
+        <ul>
+            {% for category, message in messages %}
+                <li class="{{category}}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        <script defer>
+            if (document.querySelector("#notifications>ul").children.length < 1) {
+                document.querySelector('#notifications').remove()
+            } else {
+                setTimeout(()=>{document.querySelector('#notifications').remove()}, 5000)
+            }
+        </script>
+    </section>
+    {% endif %}
+    {% endwith %}
+
+    <div id="root">{% block content %}{% endblock %}</div>
+</body>
+</html>

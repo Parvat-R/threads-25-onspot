@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='form.css') }}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <form action="" method="post">
+        <h2>On Spot Register</h2>
+
+        <div class="groups">
+
+            <div class="left">
+
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="text" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="college_name">College Name:</label>
+                    <input type="text" id="college_name" name="college_name" required>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="workshops">Workshop:</label>
+                    <select id="workshops" name="workshop">
+                        <option value="none">None</option>
+                        {% for workshop in workshops %}
+                        {% if workshop.disabled == False %}
+                        <option value="{{ workshop.event_name }}">{{ workshop.event_name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group dxt">
+                    <h3>Dextures Club:</h3>
+                    {% for event in _dexturs %}
+                    <label>
+                        <input type="checkbox" name="events" value="{{ event }}">
+                        {{ event }}
+                    </label>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+
+            <div class="middle">
+                <div class="form-group">
+                    <label for="paid">Payment Method</label>
+                    <select name="payment_method" id="payment_method">
+                        <option value="cash">Cash</option>
+                        <option value="upi">UPI</option>
+                    </select>
+                </div>
+                <div class="reflection">
+                    <div class="amount">
+                        <label for="amount">Amount to pay</label>
+                        <input type="integer" id="amount" name="amount" value="0" disabled>
+                    </div>
+                    <div class="cash">
+
+                    </div>
+                    <div class="upi">
+                        <input type="integer" id="transaction_id" name="transaction_id">
+                        <div class="qr300">
+                            <img src="qr300.png" alt="300 Rs. QR">
+                        </div>
+                        <div class="qr200">
+                            <img src="qr200.png" alt="200 Rs. QR">
+                        </div>
+                        <div class="qr500">
+                            <img src="qr500.png" alt="500 Rs. QR">
+                        </div>
+                    </div>
+
+                    <div class="paid">
+                        <input type="checkbox" value="paid" name="paid">
+                        <label for="paid">Paid</label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="right">
+
+                <div class="form-group events_list">
+                    <h3>Tech Events:</h3>
+                    {% for event in _tech_events %}
+                    <label>
+                        <input type="checkbox" class="events" name="events" value="{{ event }}">
+                        {{ event }}
+                    </label>
+                    {% endfor %}
+                    <h3>Non Tech Events:</h3>
+                    {% for event in _non_tech_events %}
+                    <label>
+                        <input type="checkbox" name="events" value="{{ event }}">
+                        {{ event }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+        <button type="submit" class="submit-button">Submit</button>
+    </form>
+</div>
+<script>
+    function refreshAmount() {
+        const workshop = document.getElementById("workshops").value;
+        const email = document.getElementById("email").value;
+        const amount = document.getElementById("amount");
+        email.toLowerCase();
+        const selected_events = document.querySelectorAll('input[name="events"]:checked');
+        const events = selected_events;
+        if (email.includes("cse@sonatech.ac.in") || email.includes("csd@sonatech.ac.in") || email.includes("aiml@sonatech.ac.in")) {
+            if (workshop == "none") {
+                amount.value = 0;
+            } else {
+                amount.value = 200;
+            }
+        } else {
+            if (workshop != "none" && events.length > 0) {
+                amount.value = 500;
+            } else if (workshop == "none" && events.length > 0) {
+                amount.value = 200;
+            } else if (workshop != "none" && events.length == 0) {
+                amount.value = 300;
+            } else {
+                amount.value = 0;
+            }
+        }
+        const upi = document.querySelector(".upi");
+        upi.classList = `upi qr${amount.value}`;
+    }
+    document.getElementById("workshops").addEventListener("change", function () {
+        refreshAmount();
+    });
+    document.querySelectorAll(".events").forEach(element => {
+        element.addEventListener("change", function () {
+            refreshAmount();
+        })
+    });
+    document.getElementById("email").addEventListener("change", function () {
+        refreshAmount();
+    })
+</script>
+{% endblock %}
