@@ -3,6 +3,12 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='form.css') }}">
+<style>
+    img {
+        position: absolute;
+        width: 200px;
+    }
+</style>
 {% endblock %}
 {% block content %}
 <div class="container">
@@ -77,13 +83,13 @@
                     <div class="upi">
                         <input type="integer" id="transaction_id" name="transaction_id">
                         <div class="qr300">
-                            <img src="qr300.png" alt="300 Rs. QR">
+                            <img src="/static/qr300.png" alt="300 Rs. QR">
                         </div>
                         <div class="qr200">
-                            <img src="qr200.png" alt="200 Rs. QR">
+                            <img src="/static/qr200.png" alt="200 Rs. QR">
                         </div>
                         <div class="qr500">
-                            <img src="qr500.png" alt="500 Rs. QR">
+                            <img src="/static/qr500.png" alt="500 Rs. QR">
                         </div>
                     </div>
 
@@ -108,7 +114,7 @@
                     <h3>Non Tech Events:</h3>
                     {% for event in _non_tech_events %}
                     <label>
-                        <input type="checkbox" name="events" value="{{ event }}">
+                        <input type="checkbox" class="events" name="events" value="{{ event }}">
                         {{ event }}
                     </label>
                     {% endfor %}

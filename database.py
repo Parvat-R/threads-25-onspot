@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 
 # Load MongoDB URI from .env
 load_dotenv()
-uri = "mongodb+srv://threads25cse:aAlBJxpockulLRWh@threads-1.nlete.mongodb.net/?retryWrites=true&w=majority&appName=threads-1"
-# uri = "mongodb://localhost:27017/"
+# uri = "mongodb+srv://threads25cse:aAlBJxpockulLRWh@threads-1.nlete.mongodb.net/?retryWrites=true&w=majority&appName=threads-1"
+uri = "mongodb://localhost:27017/"
 MONGO_URI = os.environ.get("MONGO_URI", uri)
 print(MONGO_URI)
 
@@ -388,3 +388,52 @@ def get_workshop_registration_count(workshop_name: str):
     return count
 
 # create_admin("admin", "admin")
+def count_total_students():
+    if students_collection == None:
+        return 0
+    return students_collection.count_documents({})
+
+
+def count_students_by_event(event_name):
+    # Count students participating in a specific event
+    count = students_collection.count_documents({"events": event_name})
+    return count
+
+def count_students_by_workshop(workshop):
+    # Count students participating in a specific event
+    count = students_collection.count_documents({"workshop": workshop})
+    return count
+
+def count_students_by_paid():
+    # Count students participating in a specific event
+    count = payment_and_otp_collection.count_documents({"paid": True})
+    return count
+
+
+def count_not_paid_students():
+    # Count students with transaction_id starting with "not-paid-"
+    not_paid_count = db.payment_and_otp.count_documents({"transaction_id": {"$regex": "^not-paid-"}})
+    print(f"Number of students with transaction IDs starting with 'not-paid-': {not_paid_count}")
+
+
+
+# print(count_total_students())
+
+
+# from events import tech_events, non_tech_events, workshops, person, dexters
+
+
+# _tech_events = [i["event_name"] for i in tech_events]
+# _non_tech_events = [i["event_name"] for i in non_tech_events]
+# _dexturs = ["Code Trail", "Rapid Relfex"]
+
+# events = _tech_events + _non_tech_events + _dexturs
+
+# for i in events:
+#     print(f"{i}: {count_students_by_event(i)}")
+
+# for i in ["Game Development (Unity)", "Intellifusion", "Web Development (Full Stack)", "Cybersecurity"]:
+#     print(f"{i}: {count_students_by_workshop(i)}")
+
+# # count_not_paid_students()
+# # print("Students who got verified: ", count_students_by_paid())
