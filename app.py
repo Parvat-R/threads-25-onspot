@@ -49,6 +49,7 @@ def register_post():
         email = request.form.get("email", "").strip().lower()
         phone = request.form["phone"]
         workshop = request.form.get("workshop", None)
+        amount = request.form.get("amount", None)
         # Changed to getlist for multiple events
         # selected_events = request.form.getlist("events")
         college_name = request.form["college_name"]
@@ -65,7 +66,8 @@ def register_post():
             student_data["workshop"] = workshop
             # student_data["events"] = selected_events
             _id = student_data["_id"]
-            db.edit_student()
+            del student_data["_id"]
+            db.edit_student(_id, student_data)
         else:
             student_data = {
                 "name": name,
@@ -81,7 +83,7 @@ def register_post():
         if not _id:
             raise Exception("Failed to create student")
 
-        tsid = transaction_id if transaction_id else f'o-{payment_type}-{_id}'
+        tsid = f"a_{amount}_" + ( transaction_id if transaction_id else f'o-{payment_type}-{_id}' )
         payment_data = db.get_payment_by_email(email)
         if not payment_data:
             db.create_payment_entry({

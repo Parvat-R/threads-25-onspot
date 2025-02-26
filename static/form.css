@@ -102,7 +102,7 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="password"],
-select#workshops {
+select#workshops, select {
     width: 100%;
     padding: 0.8em 1em;
     border-radius: 12px;
@@ -128,7 +128,7 @@ input[type="checkbox"] {
     cursor: pointer;
 }
 
-select#workshops {
+select#workshops, select {
     appearance: none;
     cursor: pointer;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
@@ -137,7 +137,7 @@ select#workshops {
     background-size: 1em;
 }
 
-select#workshops option {
+select#workshops option, select option {
     background: #2a2a2a;
     color: #fff;
     padding: 0.5em;
@@ -278,16 +278,96 @@ form .form-group.dxt {
     flex-direction: column;
 }
 
-.upi > * {
+.qrs > * {
     opacity: 0;
 }
 
-.upi.qr300 .qr300 {
+.upi.qr300 .qrs .qr300 {
     opacity: 1;
 }
-.upi.qr500 .qr500 {
+.upi.qr500 .qrs .qr500 {
     opacity: 1;
 }
-.upi.qr200 .qr200 {
+.upi.qr200 .qrs .qr200 {
     opacity: 1;
 }
+
+.middle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-self: self-start;
+}
+
+.reflection {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+input#amount:disabled {
+    background: #fff0;
+    text-align: center;
+    font-size: 1em;
+    width: 4em;
+    margin: 1em;
+    color: #ffff63;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #fff;
+}
+
+select#payment_method {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.upi.qr300 {
+    position: relative;
+}
+
+input#transaction_id {
+    position: relative;
+}
+
+.qrs .qr300 {
+    position: absolute;
+}
+
+.qrs .qr200 {
+    position: absolute;
+}
+
+.qrs .qr500 {
+    position: absolute;
+}
+.paid {
+    position: relative;
+    align-self: center;
+    justify-self: center;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+.qrs {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+}
+
+img {
+        width: 300px;
+    }
