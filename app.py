@@ -54,8 +54,6 @@ def register_post():
         # selected_events = request.form.getlist("events")
         college_name = request.form["college_name"]
         payment_type = request.form["payment_method"]
-        transaction_id = request.form.get("transaction_id", None)
-        upi_id = request.form.get("upi_id", None)
         paid = request.form.get("paid", None)
         paid = True if paid == "paid" else False
 
@@ -83,18 +81,18 @@ def register_post():
             }
             _id = db.create_student(student_data)
 
-        tsid = f"a_{amount}_" + ( transaction_id if transaction_id else f'o-{payment_type}-{_id}' )
+        tsid = f"a_{amount}_" + f'o-{payment_type}-{_id}' 
         payment_data = db.get_payment_by_email(email)
         if not payment_data:
             db.create_payment_entry({
                 "email": email,
                 "paid": True,
                 "transaction_id": tsid,
-                "upi_id": upi_id
+                "upi_id": None
             })
             payment_data = db.get_payment_by_email(email)
         else:
-            db.update_payment_status(email, tsid, upi_id)
+            db.update_payment_status(email, tsid, None)
             
         flash("Registration successful!", "success")
         emails.send_id_mail(student_data, payment_data, f"https://threadscse.co.in/admin/student/{_id}")
