@@ -50,7 +50,7 @@ def register_post():
         phone = request.form["phone"]
         workshop = request.form.get("workshop", None)
         # Changed to getlist for multiple events
-        selected_events = request.form.getlist("events")
+        # selected_events = request.form.getlist("events")
         college_name = request.form["college_name"]
         payment_type = request.form["payment_method"]
         transaction_id = request.form.get("transaction_id", None)
@@ -61,31 +61,39 @@ def register_post():
         print("all getails got")
 
         if db.student_exists(email, phone):
-            flash("Error: Email, Phone already exists! Try logging in.", "danger")
-            return redirect(url_for("register"))
-
-        student_data = {
-            "name": name,
-            "email": email,
-            "phone": phone,
-            "workshop": workshop,
-            "events": selected_events,  # Now it's a list
-            "college_name": college_name
-        }
-        _id = db.create_student(student_data)
+            student_data = db.get_student_by_email(email)
+            student_data["workshop"] = workshop
+            # student_data["events"] = selected_events
+            _id = student_data["_id"]
+            db.edit_student()
+        else:
+            student_data = {
+                "name": name,
+                "email": email,
+                "phone": phone,
+                "workshop": workshop,
+                # "events": selected_events,  # Now it's a list
+                "events": [],  # Now it's a list
+                "college_name": college_name
+            }
+            _id = db.create_student(student_data)
 
         if not _id:
             raise Exception("Failed to create student")
 
         tsid = transaction_id if transaction_id else f'o-{payment_type}-{_id}'
-
-        db.create_payment_entry({
-            "email": email,
-            "paid": True,
-            "transaction_id": tsid,
-            "upi_id": upi_id
-        })
         payment_data = db.get_payment_by_email(email)
+        if not payment_data:
+            db.create_payment_entry({
+                "email": email,
+                "paid": True,
+                "transaction_id": tsid,
+                "upi_id": upi_id
+            })
+            payment_data = db.get_payment_by_email(email)
+        else:
+            db.update_payment_status(email, tsid, upi_id)
+            
         flash("Registration successful!", "success")
         emails.send_id_mail(student_data, payment_data, f"https://threadscse.co.in/admin/student/{_id}")
 

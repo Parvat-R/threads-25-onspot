@@ -23,7 +23,7 @@ try:
     payment_and_otp_collection = db.payment_and_otp
     login_otp_collection = db.login_otp  # New collection for login OTPs
     admin_collection = db.admins
-    bot_verified_payment = db.bot_verified_payment
+    token_recieve_collection = db.token_recieve
 
     # Ensure indexes for students collection
     students_collection.create_index("email", unique=True)
@@ -42,6 +42,8 @@ try:
 
     # Ensure indexes for admin collection
     admin_collection.create_index("username", unique=True)
+
+    token_recieve_collection.create_index("email", unique=True)
 
     print("[✅] Connected to MongoDB")
 
@@ -86,7 +88,10 @@ class BotVerifiedPaymentModel(BaseModel):
     email: EmailStr
     verified: bool
 
-# Login OTP Collection Functions
+
+class TokenRecieveModel(BaseModel):
+    email: EmailStr
+    token_recieved: bool
 
 
 def create_login_otp(email: str, otp: str):
@@ -417,23 +422,47 @@ def count_not_paid_students():
 
 
 
-# print(count_total_students())
+def new_token_recieve(email: str):
+    if token_recieve_collection == None:
+        return None
+    return token_recieve_collection.insert_one({"email": email, "token_recieve": True, "created_at": datetime.now()})
 
 
-# from events import tech_events, non_tech_events, workshops, person, dexters
+def update_to_true(email: str):
+    if token_recieve_collection == None:
+        return None
+    return token_recieve_collection.update_one({"email": email}, {"$set": {"token_recieve": True}})
 
 
-# _tech_events = [i["event_name"] for i in tech_events]
-# _non_tech_events = [i["event_name"] for i in non_tech_events]
-# _dexturs = ["Code Trail", "Rapid Relfex"]
+def update_to_false(email: str):
+    if token_recieve_collection == None:
+        return None
+    return token_recieve_collection.update_one({"email": email}, {"$set": {"token_recieve": False}})
 
-# events = _tech_events + _non_tech_events + _dexturs
+
+def get_token_recieve(email: str):
+    if token_recieve_collection == None:
+        return None
+    return token_recieve_collection.find_one({"email": email})
+
+
+print("total students: ", count_total_students())
+
+
+from events import tech_events, non_tech_events, workshops, person, dexters
+
+
+_tech_events = [i["event_name"] for i in tech_events]
+_non_tech_events = [i["event_name"] for i in non_tech_events]
+_dexturs = ["Code Trail", "Rapid Relfex"]
+
+events = _tech_events + _non_tech_events + _dexturs
 
 # for i in events:
 #     print(f"{i}: {count_students_by_event(i)}")
 
-# for i in ["Game Development (Unity)", "Intellifusion", "Web Development (Full Stack)", "Cybersecurity"]:
-#     print(f"{i}: {count_students_by_workshop(i)}")
+_workshops = ["Game Development (Unity)", "Intellifusion", "Web Development (Full Stack)", "Cybersecurity"]
+
 
 # # count_not_paid_students()
 # # print("Students who got verified: ", count_students_by_paid())
