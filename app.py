@@ -29,10 +29,10 @@ def register():
     if "student_id" in session:
         flash("You are already registered!", "danger")
         return redirect(url_for("myid"))
-    for i in workshops:
-        i["seats_filled"] = db.get_workshop_registration_count(i["event_name"])
-        if i["seats_filled"] >= i["seats"]:
-            i["disabled"] = True
+    # for i in workshops:
+    #     i["seats_filled"] = db.get_workshop_registration_count(i["event_name"])
+    #     if i["seats_filled"] >= i["seats"]:
+    #         i["disabled"] = True
     return render_template(
         "register.html",
         workshops=workshops,
@@ -61,8 +61,8 @@ def register_post():
 
         print("all getails got")
 
-        if db.student_exists(email, phone):
-            student_data = db.get_student_by_email(email)
+        student_data = db.get_student_by_email(email)
+        if db.student_exists(email, phone) and student_data:
             student_data["workshop"] = workshop
             # student_data["events"] = selected_events
             _id = student_data["_id"]
