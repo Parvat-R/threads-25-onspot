@@ -68,6 +68,7 @@ def register_post():
             _id = student_data["_id"]
             del student_data["_id"]
             db.edit_student(_id, student_data)
+            _id = db.get_student_by_email(email)
         else:
             student_data = {
                 "name": name,
