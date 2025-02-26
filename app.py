@@ -62,14 +62,16 @@ def register_post():
         print("all getails got")
 
         student_data = db.get_student_by_email(email)
-        if db.student_exists(email, phone) and student_data:
+        _id = db.get_student_by_email(email)
+        if not _id and db.student_exists(email, phone) and student_data:
             student_data["workshop"] = workshop
             # student_data["events"] = selected_events
             _id = student_data["_id"]
             del student_data["_id"]
             db.edit_student(_id, student_data)
             _id = db.get_student_by_email(email)
-        else:
+
+        if not _id:
             student_data = {
                 "name": name,
                 "email": email,
@@ -80,9 +82,6 @@ def register_post():
                 "college_name": college_name
             }
             _id = db.create_student(student_data)
-
-        if not _id:
-            raise Exception("Failed to create student")
 
         tsid = f"a_{amount}_" + ( transaction_id if transaction_id else f'o-{payment_type}-{_id}' )
         payment_data = db.get_payment_by_email(email)
