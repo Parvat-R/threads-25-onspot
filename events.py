@@ -5,7 +5,7 @@ workshops = [
         "organizers": [
             "Mithun - 9025251745"
         ],
-        "seats" : 100,
+        "seats" : 120,
         "seats_filled" : 0,
         "disabled" : False
     },
@@ -16,7 +16,7 @@ workshops = [
         "organizers": [
             "Rohith - 7418933402"
         ],
-        "seats" : 50,
+        "seats" : 60,
         "seats_filled" : 0,
         "disabled" : False
     },
@@ -26,7 +26,7 @@ workshops = [
         "organizers": [
             "Karthikeyan - 9751990206"
         ],
-        "seats" : 90,
+        "seats" : 135,
         "seats_filled" : 0,
         "disabled" : False
     },
@@ -36,7 +36,7 @@ workshops = [
         "organizers": [
             "Dhanu Sree - 9486190390"
         ],
-        "seats" : 80,
+        "seats" : 100,
         "seats_filled" : 0,
         "disabled" : False
     }

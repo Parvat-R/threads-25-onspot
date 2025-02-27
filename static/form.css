@@ -278,11 +278,11 @@ form .form-group.dxt {
     flex-direction: column;
 }
 
-.qrs > * {
+/* .qrs > * {
     opacity: 0;
-}
+} */
 
-.upi.qr300 .qrs .qr300 {
+/* .upi.qr300 .qrs .qr300 {
     opacity: 1;
 }
 .upi.qr500 .qrs .qr500 {
@@ -290,7 +290,7 @@ form .form-group.dxt {
 }
 .upi.qr200 .qrs .qr200 {
     opacity: 1;
-}
+} */
 
 .middle {
     display: flex;
@@ -331,7 +331,7 @@ select#payment_method {
 input#transaction_id {
     position: relative;
 }
-
+/* 
 .qrs .qr300 {
     position: absolute;
 }
@@ -342,7 +342,7 @@ input#transaction_id {
 
 .qrs .qr500 {
     position: absolute;
-}
+} */
 .paid {
     position: relative;
     align-self: center;
@@ -370,4 +370,8 @@ img {
 
 img {
         width: 300px;
+    }
+
+    .hidden {
+        display: none;
     }

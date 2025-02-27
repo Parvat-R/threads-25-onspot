@@ -34,26 +34,26 @@
                 </div>
                 
                 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="workshops">Workshop:</label>
                     <select id="workshops" name="workshop">
                         <option value="none">None</option>
-                        {% for workshop in workshops %}
-                        {% if workshop.disabled == False %}
-                        <option value="{{ workshop.event_name }}">{{ workshop.event_name }}</option>
-                        {% endif %}
-                        {% endfor %}
+                        {# for workshop in workshops #}
+                        {# if workshop.disabled == False #}
+                        <option value="{# workshop.event_name #}">{# workshop.event_name #}</option>
+                        {# endif #}
+                        {# endfor #}
                     </select>
-                </div>
-                <!-- <div class="form-group dxt">
-                    <h3>Dextures Club:</h3>
-                    {# for event in _dexturs #}
-                    <label>
-                        <input type="checkbox" name="events" value="{# event #}">
-                        {# event #}
-                    </label>
-                    {# endfor #}
                 </div> -->
+                <div class="form-group dxt">
+                    <h3>Dextures Club:</h3>
+                    {% for event in _dexturs %}
+                    <label>
+                        <input type="checkbox" name="events" value="{{ event }}">
+                        {{ event }}
+                    </label>
+                    {% endfor %}
+                </div>
                 <div class="form-group">
                     <label for="college_name">Transaction ID</label>
                     <input type="text" id="transaction_id" name="transaction_id" />
@@ -80,88 +80,83 @@
                         <input type="integer" id="amount" name="amount" value="0">
                     </div>
                     <div class="cash">
-
+                        Recieve the cash!!!
                     </div>
-                    <div class="upi">
+                    <div class="upi hidden">
+                        <div class="sona hidden">
+                            Free for you :)
+                        </div>
                         <div class="qrs">
-                            <div class="qr300">
-                                <img src="/static/qr300.png" alt="300 Rs. QR">
-                            </div>
-                            <div class="qr200">
-                                <img src="/static/qr200.png" alt="200 Rs. QR">
-                            </div>
-                            <div class="qr500">
-                                <img src="/static/qr500.png" alt="500 Rs. QR">
-                            </div>
+                            <img src="/static/qr200.png" alt="200 Rs. QR">
                         </div>
                     </div>
                 </div>
             </div>
 
 
-            <!-- <div class="right">
+            <div class="right">
 
                 <div class="form-group events_list">
                     <h3>Tech Events:</h3>
-                    {# for event in _tech_events #}
+                    {% for event in _tech_events %}
                     <label>
                         <input type="checkbox" class="events" name="events" value="{{ event }}">
-                        {# event #}
+                        {{ event }}
                     </label>
-                    {# endfor #}
+                    {% endfor %}
                     <h3>Non Tech Events:</h3>
-                    {# for event in _non_tech_events #}
+                    {% for event in _non_tech_events %}
                     <label>
                         <input type="checkbox" class="events" name="events" value="{{ event }}">
-                        {# event #}
+                        {{ event }}
                     </label>
-                    {# endfor #}
+                    {% endfor %}
                 </div>
-            </div> -->
+            </div>
         </div>
 
 
         <button type="submit" class="submit-button">Submit</button>
     </form>
 </div>
-<script>
-    function refreshAmount() {
-        const workshop = document.getElementById("workshops").value;
+<script defer>
+    document.getElementById("email").addEventListener("keydown", () => {
         const email = document.getElementById("email").value;
-        const amount = document.getElementById("amount");
-        email.toLowerCase();
-        const selected_events = document.querySelectorAll('input[name="events"]:checked');
-        const events = selected_events;
-        if (email.includes("cse@sonatech.ac.in") || email.includes("csd@sonatech.ac.in") || email.includes("aiml@sonatech.ac.in")) {
-            if (workshop == "none") {
-                amount.value = 0;
-            } else {
-                amount.value = 200;
-            }
+        if (email.includes("cse@sonatech.ac.in") || email.includes("csd@sonatech.ac.in") || email.includes("aml@sonatech.ac.in")) {
+            document.getElementById("amount").value = 0;
+            // hide the qr and display the .sona as a block if 
+            document.querySelector(".sona").className = "sona"
+            document.querySelector(".qrs").className = "qrs hidden"
         } else {
-            if (workshop != "none" && events.length > 0) {
-                amount.value = 500;
-            } else if (workshop == "none" && events.length > 0) {
-                amount.value = 200;
-            } else if (workshop != "none" && events.length == 0) {
-                amount.value = 300;
-            } else {
-                amount.value = 0;
-            }
+            document.getElementById("amount").value = 200;
+            // hide the qr and display the .sona as a block if 
+            document.querySelector(".sona").className = "sona hidden"
+            document.querySelector(".qrs").className = "qrs"
         }
-        const upi = document.querySelector(".upi");
-        upi.classList = `upi qr${amount.value}`;
-    }
-    document.getElementById("workshops").addEventListener("change", function () {
-        refreshAmount();
-    });
-    document.querySelectorAll(".events").forEach(element => {
-        element.addEventListener("change", function () {
-            refreshAmount();
-        })
-    });
-    document.getElementById("email").addEventListener("change", function () {
-        refreshAmount();
     })
+    document.getElementById("email").addEventListener("change", () => {
+        const email = document.getElementById("email").value;
+        if (email.includes("cse@sonatech.ac.in") || email.includes("csd@sonatech.ac.in") || email.includes("aml@sonatech.ac.in")) {
+            document.getElementById("amount").value = 0;
+            // hide the qr and display the .sona as a block if 
+            document.querySelector(".sona").className = "sona"
+            document.querySelector(".qrs").className = "qrs hidden"
+        } else {
+            document.getElementById("amount").value = 200;
+            // hide the qr and display the .sona as a block if 
+            document.querySelector(".sona").className = "sona hidden"
+            document.querySelector(".qrs").className = "qrs"
+        }
+    })
+    document.getElementById("payment_method").addEventListener("change", ()=> {
+        if (document.getElementById("payment_method").value == "cash") {
+            document.querySelector(".cash").className = "cash"
+            document.querySelector(".upi").className = "upi hidden"
+        } else {
+
+            document.querySelector(".cash").className = "cash hidden"
+            document.querySelector(".upi").className = "upi"
+        }
+    });
 </script>
 {% endblock %}

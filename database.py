@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 
 # Load MongoDB URI from .env
 load_dotenv()
-uri = "mongodb+srv://threads25cse:aAlBJxpockulLRWh@threads-1.nlete.mongodb.net/?retryWrites=true&w=majority&appName=threads-1"
-# uri = "mongodb://localhost:27017/"
+# uri = "mongodb+srv://threads25cse:aAlBJxpockulLRWh@threads-1.nlete.mongodb.net/?retryWrites=true&w=majority&appName=threads-1"
+uri = "mongodb://localhost:27017/"
 MONGO_URI = os.environ.get("MONGO_URI", uri)
 print(MONGO_URI)
 
@@ -458,11 +458,13 @@ _dexturs = ["Code Trail", "Rapid Relfex"]
 
 events = _tech_events + _non_tech_events + _dexturs
 
-# for i in events:
-#     print(f"{i}: {count_students_by_event(i)}")
+for i in events:
+    print(f"{i}: {count_students_by_event(i)}")
 
 _workshops = ["Game Development (Unity)", "Intellifusion", "Web Development (Full Stack)", "Cybersecurity"]
 
 
 # # count_not_paid_students()
 # # print("Students who got verified: ", count_students_by_paid())
+for i in _workshops:
+    print(count_students_by_workshop(i))

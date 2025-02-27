@@ -29,10 +29,10 @@ def register():
     if "student_id" in session:
         flash("You are already registered!", "danger")
         return redirect(url_for("myid"))
-    # for i in workshops:
-    #     i["seats_filled"] = db.get_workshop_registration_count(i["event_name"])
-    #     if i["seats_filled"] >= i["seats"]:
-    #         i["disabled"] = True
+    for i in workshops:
+        i["seats_filled"] = db.get_workshop_registration_count(i["event_name"])
+        if i["seats_filled"] >= i["seats"]:
+            i["disabled"] = True
     return render_template(
         "register.html",
         workshops=workshops,
@@ -48,10 +48,10 @@ def register_post():
         name = request.form["name"]
         email = request.form.get("email", "").strip().lower()
         phone = request.form["phone"]
-        workshop = request.form.get("workshop", None)
+        # workshop = request.form.get("workshop", None)
         amount = request.form.get("amount", None)
         # Changed to getlist for multiple events
-        # selected_events = request.form.getlist("events")
+        selected_events = request.form.getlist("events")
         college_name = request.form["college_name"]
         payment_type = request.form["payment_method"]
         paid = request.form.get("paid", None)
@@ -62,21 +62,21 @@ def register_post():
         student_data = db.get_student_by_email(email)
         _id = db.get_student_by_email(email)
         if not _id and db.student_exists(email, phone) and student_data:
-            student_data["workshop"] = workshop
-            # student_data["events"] = selected_events
+            # student_data["workshop"] = workshop
+            student_data["events"] = selected_events
             _id = student_data["_id"]
             del student_data["_id"]
             db.edit_student(_id, student_data)
-            _id = db.get_student_by_email(email)
+            _id = db.get_student_by_email(email)["_id"]
 
         if not _id:
             student_data = {
                 "name": name,
                 "email": email,
                 "phone": phone,
-                "workshop": workshop,
-                # "events": selected_events,  # Now it's a list
-                "events": [],  # Now it's a list
+                "workshop": None,
+                "events": selected_events,  # Now it's a list
+                # "events": [],  # Now it's a list
                 "college_name": college_name
             }
             _id = db.create_student(student_data)
